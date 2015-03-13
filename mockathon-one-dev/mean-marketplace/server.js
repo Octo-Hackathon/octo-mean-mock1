@@ -12,7 +12,10 @@ var app      = express();                               // create our app w/ exp
 
     mongoose.connect('mongodb://127.0.0.1/mean-marketplace');     // connect to mongoDB database on modulus.io
 
-    app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
+   // app.use(express.static(__dirname + '/ui'));                 // set the static files location /public/img will be /img for users
+    app.use('/javascripts', express.static(__dirname + '/ui/javascripts'));
+    app.use('/views', express.static(__dirname + '/ui/views'));    
+
     app.use(morgan('dev'));                                         // log every request to the console
     app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
     app.use(bodyParser.json());                                     // parse application/json
@@ -21,18 +24,20 @@ var app      = express();                               // create our app w/ exp
 
 app.get('/', function (req, res) {
 	
-               res.sendFile(__dirname + '/public/index.html');
+               res.sendFile(__dirname + 'index.html');
 });  
 
-//app.use('/js', express.static(__dirname + '/ui/javascripts'));
-//app.use('/views', express.static(__dirname + '/ui/views'));
+
 
 //REST API
-app.post('/api/create', oppController.create);
-//app.put('/api/publish:id', oppController.publish);
-app.get('/api/buyerlist/:user', oppController.buyerlist);
+ app.post('/api/create', oppController.create);
+ app.get('/api/buyerlist/:user', oppController.buyerlist);
+ app.get('/api/vendorlist', oppController.vendorlist); 
+ app.get('/api/opportunity/:id', oppController.opportunity);
+ app.post('/api/opportunity/:id', oppController.updateOpp);
+ //app.post('/api/publish/:id',  oppController.publishOpp);
+ app.delete('/api/opportunity/:id', oppController.deleteOpp);
 
-//app.post('/api/publish',  oppController.updateOpp);
 
 
 app.listen(3000, function() {

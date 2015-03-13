@@ -21,3 +21,58 @@ module.exports.buyerlist = function(req, res) {
 			res.json(results);
 		});
 }
+
+module.exports.vendorlist = function(req, res) {
+	Opp.find({opStatus: "Published"}, function(err, results) {
+			res.json(results);
+		});
+}
+
+module.exports.opportunity = function(req, res) {
+	var oid = req.params.id;
+	console.log('oid is :' + oid);
+	Opp.findById(oid, function(err, results) {
+			res.json(results);
+		});
+}
+
+module.exports.updateOpp = function(req, res) {
+    var opp = new Opp(req.body);
+   // var opp = req.body;
+    delete opp._id;
+  //  var update = {};
+   // update.opTitle = req.opTitle;
+
+    console.log("Updating OppId :" + req.params.id);
+    console.log("To :" + opp);
+
+
+    Opp.findByIdAndUpdate(req.params.id, {$set: opp}, 
+        function(err, results) {
+            res.json(results);
+        }
+    );
+
+}
+
+module.exports.deleteOpp = function(req, res) {
+    //var opp = new Opp(req.body);
+    var oid = req.params.id;
+	console.log('oid is :' + oid);
+
+    Opp.findByIdAndRemove(oid, 
+        function(err, results) {
+            res.json(results);
+        }
+    );
+
+}
+
+/*module.exports.publishOpp = function(req, res) {
+    var opp = new Opp(req.body);
+    opp.findByIdAndUpdate(req.params.id,
+        { opStatus : "Published" },
+        function(err, results) {
+            res.json(results);
+        });
+}*/
